@@ -26,7 +26,12 @@ shared_scripts {
 client_scripts {
     -- DADOS (carregados primeiro, usados depois)
     -- ─────────────────────────────────────────
-    'metaped_assets/*.lua',
+    '@metaped_assets/categorizedComponents.lua',
+    '@metaped_assets/componentCategories.lua',
+    '@metaped_assets/drawables.lua',
+    '@metaped_assets/matchTagsDrawables.lua',
+    '@metaped_assets/palettes.lua',
+    '@metaped_assets/tints.lua',
      
     -- CÓDIGO PRINCIPAL (usa os dados acima)
     -- ────────────────────────────────────
