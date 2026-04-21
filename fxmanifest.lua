@@ -5,36 +5,34 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 name        'TheWantedSole_Studio'
 description 'Editor de Outfit com XML, Cores, Câmera e Projetos'
 author      'Valvesitor'
-version     '2.0.1'
+version     '2.0.2'
 
 -- ============================================================
 -- SHARED SCRIPTS
 -- ============================================================
--- Estes são carregados PRIMEIRO em ambos client e server
 shared_scripts {
-    'libs/slaxml.lua',          -- parser SAX (sem require() externo)
-    'shared/slaxmlparser.lua',  -- wrapper: SLAXML → tabela Lua
+    'libs/slaxml.lua',
+    'shared/slaxmlparser.lua',
     'shared/config.lua',
     'shared/components.lua',
+    -- FIX: 'shared/components.lua' removido — arquivo não existe no projeto
 }
 
 -- ============================================================
 -- CLIENT SCRIPTS (ORDEM IMPORTA!)
 -- ============================================================
--- 1. Primeiro: Dados (componentes, categorias, drawables)
--- 2. Depois: Código que usa os dados (ped, camera, client)
 client_scripts {
-    -- DADOS (carregados primeiro, usados depois)
-    -- ─────────────────────────────────────────
-    '@metaped_assets/categorizedComponents.lua',
-    '@metaped_assets/componentCategories.lua',
-    '@metaped_assets/drawables.lua',
-    '@metaped_assets/matchTagsDrawables.lua',
-    '@metaped_assets/palettes.lua',
-    '@metaped_assets/tints.lua',
-     
-    -- CÓDIGO PRINCIPAL (usa os dados acima)
-    -- ────────────────────────────────────
+    -- FIX: removido o '@' que fazia o RedM procurar num resource EXTERNO chamado
+    -- 'metaped_assets'. Os arquivos estão DENTRO deste próprio resource,
+    -- por isso o caminho correto é sem '@'.
+    'metaped_assets/categorizedComponents.lua',
+    'metaped_assets/componentCategories.lua',
+    'metaped_assets/drawables.lua',
+    'metaped_assets/matchTagsDrawables.lua',
+    'metaped_assets/palettes.lua',
+    'metaped_assets/tints.lua',
+    
+
     'client/ped.lua',
     'client/camera.lua',
     'client/client.lua',
@@ -61,11 +59,6 @@ files {
     'html/style.css',
 }
 
--- ============================================================
--- EXPORTS
--- ============================================================
--- Se outro script precisar das funções daqui
-exports {
-    'getPlayerOutfit',
-    'setPlayerOutfit',
-}
+-- FIX: exports removidos — getPlayerOutfit e setPlayerOutfit nunca foram
+-- implementados em nenhum arquivo. Declarar exports que não existem
+-- causa erro ao iniciar o resource.
