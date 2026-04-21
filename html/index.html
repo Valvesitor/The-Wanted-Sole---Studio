@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>The Wanted Sole Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app" class="hidden">
+
+  <!-- ═══════════════════════════════════════════
+       PAINEL ESQUERDO — CÂMERA + PROJETOS
+  ═══════════════════════════════════════════ -->
+  <aside class="panel panel-left" id="panelLeft">
+
+    <!-- FPS counter -->
+    <div class="fps-badge" id="fpsBadge">-- fps</div>
+
+    <!-- CÂMERA -->
+    <section class="section">
+      <div class="section-title">Câmera</div>
+
+      <div class="slider-row">
+        <label>Zoom</label>
+        <input type="range" id="slZoom" min="0.3" max="4.0" step="0.05" value="1.35" />
+        <span class="slider-val" id="valZoom">1.35</span>
+      </div>
+      <div class="slider-row">
+        <label>Rotação H</label>
+        <input type="range" id="slRotH" min="-180" max="180" step="1" value="0" />
+        <span class="slider-val" id="valRotH">0</span>
+      </div>
+      <div class="slider-row">
+        <label>Rotação V</label>
+        <input type="range" id="slRotV" min="-89" max="89" step="1" value="-6" />
+        <span class="slider-val" id="valRotV">-6</span>
+      </div>
+      <div class="slider-row">
+        <label>Altura</label>
+        <input type="range" id="slHeight" min="-2" max="2" step="0.05" value="0" />
+        <span class="slider-val" id="valHeight">0.00</span>
+      </div>
+      <!-- Adicione isso logo abaixo do slider de Altura -->
+       
+      <div class="slider-row">
+        <label>Rotação Ped</label>
+        <input type="range" id="slPedRot" min="0" max="360" step="1" value="0" />
+        <span class="slider-val" id="valPedRot">0</span>
+      </div>
+
+      <button class="btn-focus" id="btnFocus">Foco: Corpo Inteiro</button>
+    </section>
+
+    <!-- PROJETOS -->
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title">Projetos</span>
+        <button class="btn-collapse" id="btnCollapseProj">‹</button>
+      </div>
+
+      <div class="field-row">
+        <label>Projeto</label>
+        <select id="selProject">
+          <option value="">— sem projeto —</option>
+        </select>
+      </div>
+
+      <!-- Slots de outfit -->
+      <div class="slots-list" id="slotsList">
+        <div class="slot-row" data-slot="1">
+          <input type="text" class="slot-input" placeholder="1" readonly />
+          <button class="btn-x">✕</button>
+        </div>
+        <div class="slot-row" data-slot="2">
+          <input type="text" class="slot-input" placeholder="2" readonly />
+          <button class="btn-x">✕</button>
+        </div>
+        <div class="slot-row" data-slot="3">
+          <input type="text" class="slot-input" placeholder="3" readonly />
+          <button class="btn-x">✕</button>
+        </div>
+        <div class="slot-row" data-slot="4">
+          <input type="text" class="slot-input" placeholder="4" readonly />
+          <button class="btn-x">✕</button>
+        </div>
+      </div>
+
+      <button class="btn-danger" id="btnDeleteProject">DELETAR PROJETO</button>
+    </section>
+
+
+  </aside>
+<div id="panelNotes" class="floating-panel" style="top: 100px; left: 320px; width: 250px; display: block;">
+  <div class="float-header">
+    <span>Rascunho</span>
+    <div class="float-controls">
+      <button class="float-btn" id="btnMiniNotes">—</button>
+    </div>
+  </div>
+  <div class="float-body">
+    <textarea id="txtNotes" placeholder="Anotações temporárias..." 
+      style="width: 100%; height: 120px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: var(--text); padding: 5px; font-family: var(--ui); resize: vertical;"></textarea>
+  </div>
+</div>
+  <!-- ═══════════════════════════════════════════
+       PAINEL DIREITO — OUTFIT BUILDER
+  ═══════════════════════════════════════════ -->
+  <aside class="panel panel-right" id="panelRight">
+
+    <div class="right-header">
+      <h1 class="brand">The Wanted Sole <span>Studio</span></h1>
+      <p class="brand-sub">Cole aqui o bloco de &lt;Item&gt; ... &lt;/Item&gt; do outfit</p>
+    </div>
+
+    <!-- XML EDITOR -->
+    <div class="xml-area-wrap">
+      <textarea id="xmlEditor" class="xml-editor" spellcheck="false"
+        placeholder="  <Item>&#10;    <drawable>player_zero_hat_000</drawable>&#10;    <albedo>player_zero_hat_000_c0_000_ab</albedo>&#10;    ...&#10;  </Item>"></textarea>
+    </div>
+
+    <!-- BARRA INFERIOR -->
+    <div class="bottom-bar">
+      <div class="bottom-left">
+        <div class="field-inline">
+          <label>Modelo de Ped</label>
+          <input type="text" id="inpPedModel" value="" list="pedList" />
+          <datalist id="pedList"></datalist>
+        </div>
+        <div class="field-inline">
+          <label style="font-size:0.9rem"><input type="checkbox" id="chkUsePreview" style="margin-right:8px;vertical-align:middle" />Usar preview</label>
+        </div>
+        <button class="btn-accent" id="btnSetPed">Setar Ped</button>
+      </div>
+      <div class="bottom-right">
+        <label>Outfit</label>
+        <input type="number" id="inpOutfitSlot" value="9" min="1" max="100" />
+        <button class="btn-icon" id="btnSaveSlot" title="Salvar slot">💾</button>
+      </div>
+    </div>
+
+    <!-- STATUS OUTFIT -->
+    <div class="status-bar" id="statusBar">
+      <span id="statusText">Cole o XML e clique em Aplicar Outfit</span>
+    </div>
+
+    <!-- BOTÕES DE AÇÃO -->
+    <div class="action-row">
+      <button class="btn-action green"  id="btnApply">
+        <span>✔</span> Aplicar<br>Outfit
+      </button>
+      <button class="btn-action blue"   id="btnCapture">
+        <span>📷</span> Capturar<br>Outfit Atual
+      </button>
+      <button class="btn-action yellow" id="btnEditColors">
+        <span>🎨</span> Editar<br>Cores
+      </button>
+      <button class="btn-action purple" id="btnDrawables">
+        <span>◈</span> Drawables
+      </button>
+      <button class="btn-action orange" id="btnApplyPlayer">
+        <span>🎮</span> Aplicar ao<br>Jogador
+      </button>
+      <button class="btn-action teal"   id="btnSaveOutfit">
+        <span>💾</span> Salvar<br>Outfit
+      </button>
+      <button class="btn-action red"    id="btnClose">
+        <span>✕</span> Fechar
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ═══════════════════════════════════════════
+       PAINEL FLUTUANTE — EDITOR DE CORES
+  ═══════════════════════════════════════════ -->
+  <div class="floating-panel" id="panelColors" style="display:none">
+    <div class="float-header">
+      <span>Editor de Cores</span>
+      <div class="float-controls">
+        <button class="float-btn" id="btnColorMin">—</button>
+        <button class="float-btn" id="btnColorClose">✕</button>
+      </div>
+    </div>
+    <div class="float-body">
+      <div class="field-col">
+        <label>Drawable</label>
+        <select id="selDrawable"></select>
+      </div>
+      <div class="field-col">
+        <label>Palette atual</label>
+        <input type="text" id="inpPaletteActual" readonly />
+      </div>
+      <div class="field-col">
+        <label>Paletas sugeridas</label>
+        <select id="selPaletteSug">
+          <option value="">— manter / personalizar —</option>
+        </select>
+      </div>
+
+      <div class="tint-row">
+        <label>Tint0: <span id="valT0">0</span></label>
+        <input type="range" id="slT0" min="0" max="63" value="0" />
+      </div>
+      <div class="tint-row">
+        <label>Tint1: <span id="valT1">0</span></label>
+        <input type="range" id="slT1" min="0" max="63" value="0" />
+      </div>
+      <div class="tint-row">
+        <label>Tint2: <span id="valT2">0</span></label>
+        <input type="range" id="slT2" min="0" max="63" value="0" />
+      </div>
+
+      <div class="field-col">
+        <label>Material atual</label>
+        <input type="text" id="inpMaterial" readonly />
+      </div>
+      <div class="field-col">
+        <label>Material feminino</label>
+        <select id="selMatFem">
+          <option value="">— manter / personalizado —</option>
+        </select>
+      </div>
+      <div class="field-col">
+        <label>Material masculino</label>
+        <select id="selMatMasc">
+          <option value="">— manter / personalizado —</option>
+        </select>
+      </div>
+
+      <button class="btn-full green" id="btnApplyColor">Aplicar Cor em Tempo Real</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PAINEL FLUTUANTE — DRAWABLES
+  ═══════════════════════════════════════════ -->
+  <div class="floating-panel" id="panelDrawables" style="display:none">
+    <div class="float-header">
+      <span>Drawables</span>
+      <button class="float-btn" id="btnDrawClose">✕</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="draw-tabs">
+      <button class="draw-tab active" id="tabApplied">Aplicados</button>
+      <button class="draw-tab" id="tabBrowse">⊕ Explorar</button>
+    </div>
+
+    <!-- Tab: Aplicados -->
+    <div class="float-body" id="bodyApplied">
+      <div class="drawable-list" id="drawableList">
+        <div class="empty-draw">Nenhum drawable aplicado</div>
+      </div>
+    </div>
+
+    <!-- Tab: Explorar por categoria -->
+    <div class="float-body" id="bodyBrowse" style="display:none">
+      <div class="browse-controls">
+        <div class="browse-row">
+          <select id="selGender">
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+          </select>
+          <select id="selCategory">
+            <option value="">— categoria —</option>
+          </select>
+        </div>
+        <input type="text" id="inpBrowseSearch" placeholder="Filtrar drawables..." />
+        <div class="browse-status" id="browseStatus">Selecione uma categoria</div>
+      </div>
+      <div class="browse-list" id="browseList"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TOAST
+  ═══════════════════════════════════════════ -->
+  <div class="toast-stack" id="toastStack"></div>
+
+</div><!-- #app -->
+<script src="app.js"></script>
+</body>
+</html>
